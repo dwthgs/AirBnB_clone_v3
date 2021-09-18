@@ -8,7 +8,7 @@ from api.v1.views import app_views, storage
 
 
 @app_views.route("/states", strict_slashes=False)
-def all():
+def all_states():
     """ Return of all states """
     states = []
     for state in storage.all("State").values():
@@ -18,7 +18,7 @@ def all():
 
 
 @app_views.route('/states/<state_id>', strict_slashes=False)
-def get(state_id=None):
+def find_state(state_id=None):
     """Get a state"""
     state = storage.get("State", str(state_id))
 
@@ -30,7 +30,7 @@ def get(state_id=None):
 
 @app_views.route("/states/<state_id>", methods=["DELETE"],
                  strict_slashes=False)
-def delete(state_id):
+def delete_state(state_id):
     """ Deletes a state """
     state = storage.get("State", str(state_id))
 
@@ -44,7 +44,7 @@ def delete(state_id):
 
 
 @app_views.route("/states", methods=["POST"], strict_slashes=False)
-def create():
+def create_state():
     """ create state """
     newstate = request.get_json(silent=True)
     if newstate is None:
@@ -60,7 +60,7 @@ def create():
 
 
 @app_views.route("/states/<state_id>", methods=["PUT"], strict_slashes=False)
-def update(state_id):
+def update_state(state_id):
     """ Updates a state """
     state = storage.get("State", str(state_id))
 
