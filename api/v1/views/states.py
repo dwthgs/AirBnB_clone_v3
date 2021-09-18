@@ -1,20 +1,20 @@
 #!/usr/bin/python3
 """
-States view for API
+route for handling State objects and operations
 """
-from api.v1.views import app_views
-from flask import request, jsonify, abort
-from models import storage, state
+from models.state import State
+from flask import jsonify, abort, request
+from api.v1.views import app_views, storage
 
 
-@app_views.route('/states', methods=['GET'], strict_slashes=False)
-def getallstate():
-    """Gets all states"""
-    res = []
-    for i in storage.all("State").values():
-        res.append(i.to_dict())
+@app_views.route("/states", strict_slashes=False)
+def all():
+    """ Return of all states """
+    states = []
+    for state in storage.all("State").values():
+        states.append(state.to_dict())
 
-    return jsonify(res)
+    return jsonify(states)
 
 
 @app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
@@ -49,7 +49,7 @@ def createstate():
     elif "name" not in s.keys():
         abort(400, "Missing name")
     else:
-        new_s = state.State(**s)
+        new_s = State.State(**s)
         storage.new(new_s)
         storage.save()
         return jsonify(new_s.to_dict()), 201
