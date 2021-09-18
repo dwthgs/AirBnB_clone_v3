@@ -44,6 +44,7 @@ def delete(state_id):
 
 @app_views.route("/states/<state_id>", methods=["PUT"], strict_slashes=False)
 def update(state_id):
+    """ Updates a state """
     state = storage.get("State", str(state_id))
 
     if state is None:
@@ -74,4 +75,4 @@ def create():
     new_state = State(**newstate)
     new_state.save()
 
-    return jsonify(new_state.to_dict())
+    return jsonify(new_state.to_dict()), 201
