@@ -5,6 +5,7 @@ route for handling User objects and operations
 from models.user import User
 from flask import jsonify, abort, request
 from api.v1.views import app_views, storage
+import hashlib
 
 
 @app_views.route("/users", strict_slashes=False)
@@ -56,6 +57,8 @@ def create_user():
     if "password" not in newuser:
         abort(400, "Missing password")
 
+    newuser["password"] = hashlib.md5(
+        newuser["password"].encode("utf8")).hexdigest()
     new_user = User(**newuser)
     new_user.save()
 
@@ -75,6 +78,9 @@ def update_user(user_id):
 
     if user_obj is None:
         abort(400, "Not a json")
+
+    user_obj["password"] = hashlib.md5(
+        user_obj["password"].encode("utf8")).hexdigest()
 
     for k, v in user_obj.items():
         if k not in ["id", "email", "created_at", "updated_at"]:
