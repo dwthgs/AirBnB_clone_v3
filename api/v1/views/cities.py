@@ -66,21 +66,21 @@ def create_city(state_id):
     return jsonify(new_city.to_dict()), 201
 
 
-@app_views.route("/cities/<city_id>", methods=["PUT"], strict_slashes=False)
-def update_city(city_id):
-    """ Updates a city """
-    city = storage.get("City", str(city_id))
-
-    if city is None:
+@app_views.route("cities/<city_id>",  methods=["PUT"], strict_slashes=False)
+def city_put(city_id):
+    """
+    updates specific City object by ID
+    :param city_id: city object ID
+    :return: city object and 200 on success, or 400 or 404 on failure
+    """
+    city_json = request.get_json(silent=True)
+    if city_json is None:
+        abort(400, 'Not a JSON')
+    fetched_obj = storage.get("City", str(city_id))
+    if fetched_obj is None:
         abort(404)
-
-    city_obj = request.get_json(silent=True)
-
-    if city_obj is None:
-        abort(400, "Not a json")
-
-    for k, v in city_obj.items():
-        if k not in ["id", "created_at", "updated_at"]:
-            setattr(city, k, v)
-    city.save()
-    return jsonify(city.to_dict()), 200
+    for key, val in city_json.items():
+        if key not in ["id", "created_at", "updated_at", "state_id"]:
+            setattr(fetched_obj, key, val)
+    fetched_obj.save()
+    return jsonify(fetched_obj.to_json())
