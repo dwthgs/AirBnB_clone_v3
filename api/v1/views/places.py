@@ -65,10 +65,10 @@ def create_place(city_id):
         abort(404)
 
     newplace["city_id"] = city_id
-    new_city = Place(**newplace)
-    new_city.save()
+    new_place = Place(**newplace)
+    new_place.save()
 
-    return jsonify(new_city.to_dict()), 201
+    return jsonify(new_place.to_dict()), 201
 
 
 @app_views.route("/places/<place_id>", methods=["PUT"], strict_slashes=False)
