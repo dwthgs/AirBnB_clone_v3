@@ -10,7 +10,7 @@ from api.v1.views import app_views, storage
 @app_views.route("/amenities", strict_slashes=False)
 def all_amenities():
     """ Return of all amenities """
-    amenities = [obj.to_json() for obj in storage.all("Amenity").values()]
+    amenities = [obj.to_dict() for obj in storage.all("Amenity").values()]
     return jsonify(amenities)
 
 
