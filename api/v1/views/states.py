@@ -7,7 +7,7 @@ from flask import jsonify, abort, request
 from api.v1.views import app_views, storage
 
 
-@app_views.route("/states", strict_slashes=False)
+@app_views.route("/states", methods=["GET"], strict_slashes=False)
 def all():
     """ Return of all states """
     states = []
@@ -17,7 +17,7 @@ def all():
     return jsonify(states)
 
 
-@app_views.route('/states/<state_id>', strict_slashes=False)
+@app_views.route('/states/<state_id>', methods=["GET"], strict_slashes=False)
 def get(state_id=None):
     """Get a state"""
     state = storage.get("State", str(state_id))
