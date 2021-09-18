@@ -14,7 +14,6 @@ def all_cities(state_id):
     for city in storage.all("City").values():
         if city.state_id == state_id:
             cities.append(city.to_dict())
-        # print(city.state_id)
 
     return jsonify(cities)
 
