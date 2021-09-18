@@ -52,7 +52,7 @@ def update(state_id):
     state_obj = request.get_json(silent=True)
 
     if state_obj is None:
-        abort(404, "Not a json")
+        abort(400, "Not a json")
 
     for k, v in state_obj.items():
         if k not in ["id", "created_at", "updated_at"]:
