@@ -10,10 +10,7 @@ from api.v1.views import app_views, storage
 @app_views.route("/users", strict_slashes=False)
 def all_users():
     """ Return of all users """
-    users = []
-    for user in storage.all("User").values():
-        users.append(user.to_dict())
-
+    users = [obj.to_dict() for obj in storage.all("User").values()]
     return jsonify(users)
 
 

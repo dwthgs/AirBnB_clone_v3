@@ -10,10 +10,7 @@ from api.v1.views import app_views, storage
 @app_views.route("/states", strict_slashes=False)
 def all_states():
     """ Return of all states """
-    states = []
-    for state in storage.all("State").values():
-        states.append(state.to_dict())
-
+    states = [obj.to_dict() for obj in storage.all("State").values()]
     return jsonify(states)
 
 
