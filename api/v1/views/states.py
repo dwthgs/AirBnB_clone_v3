@@ -20,7 +20,7 @@ def all():
 @app_views.route('/states/<state_id>', strict_slashes=False)
 def get(state_id=None):
     """Get a state"""
-    state = storage.get("State", state_id)
+    state = storage.get("State", str(state_id))
 
     if state is None:
         abort(404)
