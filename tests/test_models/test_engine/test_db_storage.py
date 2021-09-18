@@ -22,6 +22,8 @@ DBStorage = db_storage.DBStorage
 classes = {"Amenity": Amenity, "City": City, "Place": Place,
            "Review": Review, "State": State, "User": User}
 
+storage_type = os.environ.get('HBNB_TYPE_STORAGE')
+
 
 class TestDBStorageDocs(unittest.TestCase):
     """Tests to check the documentation and style of DBStorage class"""
@@ -88,45 +90,45 @@ class TestFileStorage(unittest.TestCase):
         """Test that save properly saves objects to file.json"""
 
     @unittest.skipIf(storage_type != 'db', 'skip if environ is not db')
-class TestStorageCount(unittest.TestCase):
-    """
-    tests count() method in DBStorage
-    """
+    class TestStorageCount(unittest.TestCase):
+        """
+        tests count() method in DBStorage
+        """
 
-    @classmethod
-    def setUpClass(cls):
-        """
-        setup tests for class
-        """
-        print('\n\n.................................')
-        print('...... Testing Get() Method ......')
-        print('.......... Place  Class ..........')
-        print('.................................\n\n')
+        @classmethod
+        def setUpClass(cls):
+            """
+            setup tests for class
+            """
+            print('\n\n.................................')
+            print('...... Testing Get() Method ......')
+            print('.......... Place  Class ..........')
+            print('.................................\n\n')
 
-    def setup(self):
-        """
-        setup method
-        """
-        self.state1 = State(name="California")
-        self.state1.save()
-        self.state2 = State(name="Colorado")
-        self.state2.save()
-        self.state3 = State(name="Wyoming")
-        self.state3.save()
-        self.state4 = State(name="Virgina")
-        self.state4.save()
-        self.state5 = State(name="Oregon")
-        self.state5.save()
-        self.state6 = State(name="New_York")
-        self.state6.save()
-        self.state7 = State(name="Ohio")
-        self.state7.save()
+        def setup(self):
+            """
+            setup method
+            """
+            self.state1 = State(name="California")
+            self.state1.save()
+            self.state2 = State(name="Colorado")
+            self.state2.save()
+            self.state3 = State(name="Wyoming")
+            self.state3.save()
+            self.state4 = State(name="Virgina")
+            self.state4.save()
+            self.state5 = State(name="Oregon")
+            self.state5.save()
+            self.state6 = State(name="New_York")
+            self.state6.save()
+            self.state7 = State(name="Ohio")
+            self.state7.save()
 
-    def test_count_all(self):
-        """
-        testing counting all instances
-        :return: True if pass, false if not pass
-        """
-        result = db_storage.count()
+        def test_count_all(self):
+            """
+            testing counting all instances
+            :return: True if pass, false if not pass
+            """
+            result = db_storage.count()
 
-        self.assertEqual(len(db_storage.all()), result)
+            self.assertEqual(len(db_storage.all()), result)
