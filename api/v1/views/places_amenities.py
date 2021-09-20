@@ -69,7 +69,7 @@ def link_amenity_to_place(place_id, amenity_id):
             break
 
     if amenity is not None:
-        return jsonify(amenity.to_json())
+        return jsonify(amenity.to_json()), 200
 
     if getenv("HBNB_TYPE_STORAGE") == "db":
         place_obj.amenities.append(amenity_obj)
@@ -78,4 +78,4 @@ def link_amenity_to_place(place_id, amenity_id):
 
     place_obj.save()
 
-    return jsonify(amenity_obj.to_json())
+    return jsonify(amenity_obj.to_json()), 201
