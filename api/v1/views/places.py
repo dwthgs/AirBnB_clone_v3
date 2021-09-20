@@ -96,46 +96,49 @@ def update_place(place_id):
     return jsonify(place.to_dict()), 200
 
 
+def check_amenities(place):
+    """ helper function """
+    place_dict = place.to_dict()
+    if "amenities" in place_dict:
+        del place_dict["amenities"]
+    return place_dict
+
+
 @app_views.route('/places_search', methods=['POST'])
-def places_search():
-    """
-        places route to handle http method for request to search places
-    """
-    all_places = [p for p in storage.all('Place').values()]
-    req_json = request.get_json()
-    if req_json is None:
-        abort(400, 'Not a JSON')
-    states = req_json.get('states')
-    if states and len(states) > 0:
-        all_cities = storage.all('City')
-        state_cities = set([city.id for city in all_cities.values()
-                            if city.state_id in states])
+def create_search():
+    """ Route search places based on JSON """
+    amenities_l = []
+    cities_l = []
+    places_l = []
+    if request.is_json:
+        data = request.get_json()
+        if len(data) is 0:
+            places_l = storage.all('Place')
+        else:
+            if 'states' in data and len(data["states"]) is not 0:
+                for my_states in data["states"]:
+                    cities_l += storage.get('State', my_states).cities
+            if 'cities' in data and len(data["cities"]) is not 0:
+                cities_l.append(data["cities"])
+                for my_cities in cities_l:
+                    places_l += list(map(lambda x: x.places,
+                                         storage.get('City', my_cities)))
+            if 'amenities' in data and len(data["amenities"]) is not 0:
+                if getenv("HBNB_TYPE_STORAGE") == 'db':
+                    places_l += list(filter(lambda x:
+                                            all(elem in
+                                                list(map(lambda y: y.id,
+                                                         x.amenities))
+                                                for elem in data["amenities"]),
+                                            storage.all('Place').values()))
+                else:
+                    places_l += list(filter(lambda x: all(elem in x.amenity_ids
+                                            for elem in data["amenities"]),
+                                            storage.all('Place').values()))
+                if len(places_l) is 0:
+                    places_l = storage.all('Place').values()
+            print(places_l)
+            print("*"*50)
+            return jsonify(list(map(check_amenities, places_l))), 200
     else:
-        state_cities = set()
-    cities = req_json.get('cities')
-    if cities and len(cities) > 0:
-        cities = set([
-            c_id for c_id in cities if storage.get('City', c_id)])
-        state_cities = state_cities.union(cities)
-    amenities = req_json.get('amenities')
-    if len(state_cities) > 0:
-        all_places = [p for p in all_places if p.city_id in state_cities]
-    elif amenities is None or len(amenities) == 0:
-        result = [place.to_json() for place in all_places]
-        return jsonify(result)
-    places_amenities = []
-    if amenities and len(amenities) > 0:
-        amenities = set([
-            a_id for a_id in amenities if storage.get('Amenity', a_id)])
-        for p in all_places:
-            p_amenities = None
-            if getenv("HBNB_TYPE_STORAGE") == 'db' and p.amenities:
-                p_amenities = [a.id for a in p.amenities]
-            elif len(p.amenities) > 0:
-                p_amenities = p.amenities
-            if p_amenities and all([a in p_amenities for a in amenities]):
-                places_amenities.append(p)
-    else:
-        places_amenities = all_places
-    result = [place.to_json() for place in places_amenities]
-    return jsonify(result)
+        return jsonify(error="Not a JSON"), 400
