@@ -10,9 +10,8 @@ from api.v1.views import app_views, storage
 @app_views.route("/states/<state_id>/cities", strict_slashes=False)
 def all_cities(state_id):
     """ Return of all cities """
-    """ Return of all cities """
     state = storage.get('State', state_id)
-    if not state:
+    if state is None:
         abort(404)
 
     cities = [city.to_dict() for city in state.cities]
@@ -30,18 +29,19 @@ def find_city(city_id=None):
     return jsonify(city.to_dict())
 
 
-@app_views.route(
-    '/cities/<city_id>',
-    methods=['DELETE'],
-    strict_slashes=False)
+@app_views.route("/cities/<city_id>", methods=["DELETE"],
+                 strict_slashes=False)
 def delete_city(city_id):
-    """Deletes a city given the id"""
-    city = storage.get('City', city_id)
-    if city:
-        city.delete()
-        storage.save()
-        return (jsonify({}), 200)
-    abort(404)
+    """ Deletes a city """
+    city = storage.get("City", city_id)
+
+    if city is None:
+        abort(404)
+
+    storage.delete(city)
+    storage.save()
+
+    return jsonify({})
 
 
 @app_views.route(
