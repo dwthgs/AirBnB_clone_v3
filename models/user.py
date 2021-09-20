@@ -31,6 +31,7 @@ class User(BaseModel, Base):
 
     @property
     def password(self):
+        """ password """
         return self._password
 
     @password.setter
