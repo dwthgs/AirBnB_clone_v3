@@ -8,17 +8,25 @@ from api.v1.views import app_views, storage
 
 
 @app_views.route("/states/<state_id>/cities", strict_slashes=False)
-@app_views.route(
-    '/states/<state_id>/cities',
-    methods=['GET'],
-    strict_slashes=False)
+def all_cities(state_id):
+    """ Return of all cities """
+    cities = []
+    for city in storage.get("City", state_id).values():
+        if city.state_id == state_id:
+            cities.append(city.to_dict())
+
+    return jsonify(cities)
+
+
+@app_views.route("/states/<state_id>/cities", strict_slashes=False)
 def get_city_for_state(state_id):
-    """Returns JSON cities in a given state"""
+    """ Return of all cities """
     state = storage.get('State', state_id)
-    if state:
-        cities = [city.to_dict() for city in state.cities]
-        return (jsonify(cities), 200)
-    abort(404)
+    if not state:
+        abort(404)
+
+    cities = [city.to_dict() for city in state.cities]
+    return jsonify(cities)
 
 
 @app_views.route('/cities/<city_id>', strict_slashes=False)
