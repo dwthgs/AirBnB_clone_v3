@@ -37,5 +37,5 @@ class User(BaseModel, Base):
     @password.setter
     def password(self, password):
         """ Hashes a user password with MD5 """
-        self._password = hashlib.md5(str(password)
-        .encode('utf8')).hexdigest()
+        self._password = hashlib.md5(str(self.password)
+                                     .encode('utf8')).hexdigest()
