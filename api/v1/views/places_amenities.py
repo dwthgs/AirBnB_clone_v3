@@ -13,11 +13,15 @@ def amenity_by_place(place_id):
     """ get all amenities related with place """
     place = storage.get("Place", place_id)
 
+    all_amenities = []
+
     if place is None:
         abort(404)
 
-    amenities = []
-    return jsonify(amenities)
+    for obj in place.amenities:
+        all_amenities.append(obj.to_dict())
+
+    return jsonify(all_amenities)
 
 
 @app_views.route("/places/<place_id>/amenities/<amenity_id>",
