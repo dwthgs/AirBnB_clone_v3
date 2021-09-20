@@ -8,7 +8,7 @@ from api.v1.views import app_views, storage
 
 
 @app_views.route("/places/<place_id>/reviews", strict_slashes=False)
-def all_cities(place_id):
+def all_reviews(place_id):
     """ Return of all reviews """
     place = storage.get('Place', place_id)
 
@@ -20,7 +20,7 @@ def all_cities(place_id):
 
 
 @app_views.route('/reviews/<review_id>', strict_slashes=False)
-def find_city(review_id=None):
+def find_review(review_id=None):
     """Get a reviews"""
     review = storage.get("Review", review_id)
 
@@ -32,7 +32,7 @@ def find_city(review_id=None):
 
 @app_views.route("/reviews/<review_id>", methods=["DELETE"],
                  strict_slashes=False)
-def delete_city(review_id):
+def delete_review(review_id):
     """ Deletes a review """
     review = storage.get("Review", review_id)
 
@@ -47,7 +47,7 @@ def delete_city(review_id):
 
 @app_views.route("/places/<place_id>/reviews", methods=["POST"],
                  strict_slashes=False)
-def create_city(place_id):
+def create_review(place_id):
     """ create review """
     newreview = request.get_json(silent=True)
     if newreview is None:
@@ -74,7 +74,7 @@ def create_city(place_id):
 
 @app_views.route("reviews/<review_id>", methods=["PUT"],
                  strict_slashes=False)
-def update_city(review_id):
+def update_review(review_id):
     """ Updates review """
     review = storage.get("Review", review_id)
 
