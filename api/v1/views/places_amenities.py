@@ -13,15 +13,11 @@ def amenity_by_place(place_id):
     """ get all amenities related with place """
     place = storage.get("Place", place_id)
 
-    all_amenities = []
-
     if place is None:
         abort(404)
 
-    for obj in place.amenities:
-        all_amenities.append(obj.to_dict())
-
-    return jsonify(all_amenities)
+    amenities = [amenity.to_dict() for amenity in place.amenities]
+    return jsonify(amenities)
 
 
 @app_views.route("/places/<place_id>/amenities/<amenity_id>",
@@ -31,7 +27,7 @@ def unlink_amenity_from_place(place_id, amenity_id):
     """ delete an amenity in a place """
 
     if not storage.get("Place", place_id):
-        abort(404)
+        abort(400)
     if not storage.get("Amenity", amenity_id):
         abort(404)
 
