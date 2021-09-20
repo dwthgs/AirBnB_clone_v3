@@ -16,7 +16,7 @@ def amenity_by_place(place_id):
     if place is None:
         abort(404)
 
-    amenities = [amenity.to_dict() for amenity in place.amenities]
+    amenities = []
     return jsonify(amenities)
 
 
