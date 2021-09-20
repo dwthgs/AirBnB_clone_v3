@@ -10,10 +10,10 @@ from api.v1.views import app_views, storage
 @app_views.route("/cities/<city_id>/places", strict_slashes=False)
 def all_places(city_id):
     """ Return of all places """
-    if city_id is None:
-        abort(404)
-
     city = storage.get("City", city_id)
+
+    if city is None:
+        abort(404)
 
     places = [place.to_dict() for place in city.places]
     return jsonify(places)
