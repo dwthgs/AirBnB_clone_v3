@@ -32,6 +32,8 @@ def unlink_amenity_from_place(place_id, amenity_id):
         abort(404)
 
     place = storage.get("Place", place_id)
+    if place is None:
+        abort(404)
     found = 0
 
     for obj in place.amenities:
