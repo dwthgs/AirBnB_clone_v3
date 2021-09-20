@@ -14,7 +14,7 @@ def amenity_by_place(place_id):
     place = storage.get("Place", place_id)
 
     if place is None:
-        abort(404)
+        abort(400)
 
     amenities = [amenity.to_dict() for amenity in place.amenities]
     return jsonify(amenities)
@@ -27,7 +27,7 @@ def unlink_amenity_from_place(place_id, amenity_id):
     """ delete an amenity in a place """
 
     if not storage.get("Place", place_id):
-        abort(400)
+        abort(404)
     if not storage.get("Amenity", amenity_id):
         abort(404)
 
