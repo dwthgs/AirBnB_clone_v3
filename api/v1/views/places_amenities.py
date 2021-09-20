@@ -14,7 +14,7 @@ def amenity_by_place(place_id):
     place = storage.get("Place", place_id)
 
     if place is None:
-        abort(400)
+        abort(404)
 
     amenities = [amenity.to_dict() for amenity in place.amenities]
     return jsonify(amenities)
@@ -66,7 +66,7 @@ def link_amenity_to_place(place_id, amenity_id):
         abort(404)
 
     for obj in place_obj.amenities:
-        if str(obj.id) == amenity_id:
+        if obj.id == amenity_id:
             amenity = obj
             break
 
