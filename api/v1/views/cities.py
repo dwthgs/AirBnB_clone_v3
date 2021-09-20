@@ -18,15 +18,16 @@ def all_cities(state_id):
     return jsonify(cities)
 
 
-@app_views.route('/cities/<city_id>', strict_slashes=False)
-def find_city(city_id=None):
-    """Get a city"""
-    city = storage.get("City", str(city_id))
-
-    if city is None:
-        abort(404)
-
-    return jsonify(city.to_dict())
+@app_views.route(
+    '/cities/<city_id>',
+    methods=['GET'],
+    strict_slashes=False)
+def get_city(city_id):
+    """Returns JSON city and id"""
+    city = storage.get('City', city_id)
+    if city:
+        return (jsonify(city.to_dict()), 200)
+    abort(404)
 
 
 @app_views.route(
